@@ -6,6 +6,23 @@ Possui uma interface gráfica moderna (estilo Discord Dark Theme) desenvolvida c
 
 ---
 
+## 🏷️ Versionamento e Releases (Semantic Versioning)
+
+O projeto adota o padrão de **[Semantic Versioning (SemVer 2.0.0)](https://semver.org/lang/pt-BR/)**: `vMAJOR.MINOR.PATCH`.
+
+- **`v1.0.0` (Release Atual Oficial)**:
+  - 💾 **Persistência SQLite**: Banco local `vanilla_local.db` integrado.
+  - 🖥️ **Interface GUI CustomTkinter**: Painel completo de controle, fichas de RPG, abas NSFW e token BYOB.
+  - 🎲 **Motor RPG Rollem**: Notações completas (`XdY`, `XdY!`, `XdYns`, `(expr)`, `dF`, `N#expr`, `XdYdZ`, `XdYdhZ`).
+  - 🔞 **NSFW com Personagens**: Busca por nomes de personagens, animes e mídias na Rule34 e Redgifs.
+  - 📦 **Executável Windows**: Release compilado e pronto para download (`DiscordSimpleBotClient-v1.0.0-Windows-x64.zip`).
+
+### 📦 Como Baixar a Release Compilada
+Você pode baixar a versão pronta para uso diretamente na página de Releases do GitHub:
+👉 **[Baixar Vanilla Bot Client v1.0.0 (GitHub Release)](https://github.com/PHLopesvc07/Vanilla-DC-Bot-Manager/releases/tag/v1.0.0)**
+
+---
+
 ## 🌟 Principais Recursos
 
 - 🔑 **Token Personalizado de Bot (Bring Your Own Bot)**: Permite inserir qualquer Token de bot próprio do Discord na interface gráfica, com botão de exibição/ocultação segura (`👁️`/`🔒`).
