@@ -11,6 +11,15 @@ from src.modules.user_utils import UserUtilsCog
 # Cache para deduplicação de mensagens
 processed_message_ids = set()
 
+class VanillaBot(commands.Bot):
+    async def setup_hook(self):
+        await self.add_cog(RPGCog(self))
+        await self.add_cog(ManagementCog(self))
+        await self.add_cog(GamesCog(self))
+        await self.add_cog(EconomyCog(self))
+        await self.add_cog(NSFWCog(self))
+        await self.add_cog(UserUtilsCog(self))
+
 def create_discord_bot(get_app_instance_func=None):
     """Cria e configura uma instância modular do Bot do Discord."""
     intents = discord.Intents.default()
@@ -19,7 +28,7 @@ def create_discord_bot(get_app_instance_func=None):
     intents.voice_states = True
     intents.message_content = True
     
-    new_bot = commands.Bot(command_prefix="!", intents=intents, help_command=None)
+    new_bot = VanillaBot(command_prefix="!", intents=intents, help_command=None)
 
     @new_bot.command(name="help", aliases=["ajuda"])
     async def help_cmd(ctx, category: str = None):
@@ -167,16 +176,5 @@ def create_discord_bot(get_app_instance_func=None):
             await message.channel.send(reply_txt)
             
         await new_bot.process_commands(message)
-
-    # Registra Cogs Assíncronas
-    async def load_cogs():
-        await new_bot.add_cog(RPGCog(new_bot))
-        await new_bot.add_cog(ManagementCog(new_bot))
-        await new_bot.add_cog(GamesCog(new_bot))
-        await new_bot.add_cog(EconomyCog(new_bot))
-        await new_bot.add_cog(NSFWCog(new_bot))
-        await new_bot.add_cog(UserUtilsCog(new_bot))
-
-    asyncio.run_coroutine_threadsafe(load_cogs(), new_bot.loop if new_bot.loop and new_bot.loop.is_running() else asyncio.get_event_loop())
 
     return new_bot
