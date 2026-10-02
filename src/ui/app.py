@@ -284,6 +284,25 @@ class VoiceStreamApp(ctk.CTk):
         )
         self.btn_show_token.pack(side="right")
 
+        # Card de Tutorial: Como obter seu Token do Discord Bot
+        card_tutorial = ctk.CTkFrame(container, corner_radius=10, fg_color="#1e1f22")
+        card_tutorial.pack(fill="x", pady=6)
+
+        ctk.CTkLabel(card_tutorial, text="📖 PASSO A PASSO: COMO OBTER O TOKEN DO SEU BOT NO DISCORD", font=ctk.CTkFont(size=12, weight="bold"), text_color="#f0b232").pack(anchor="w", padx=15, pady=(10, 4))
+        
+        tutorial_text = (
+            "1. Acesse o **Portal de Desenvolvedores do Discord**: https://discord.com/developers/applications\n"
+            "2. Clique no botão **'New Application'** (Nova Aplicação) no canto superior direito e dê um nome ao seu Bot.\n"
+            "3. No menu lateral esquerdo, clique na aba **'Bot'**.\n"
+            "4. Na seção Token, clique no botão **'Reset Token'** e copie a chave gerada.\n"
+            "5. **IMPORTANTE (Intents Obligatórias)**: Role a página até a seção **'Privileged Gateway Intents'** e ATIVE as 3 opções abaixo:\n"
+            "   ✅ **PRESENCE INTENT**\n"
+            "   ✅ **SERVER MEMBERS INTENT**\n"
+            "   ✅ **MESSAGE CONTENT INTENT** (Essencial para o motor RPG e comandos)\n"
+            "6. Cole o Token copiado no campo acima e clique em **'⚡ Ligar Bot'**."
+        )
+        ctk.CTkLabel(card_tutorial, text=tutorial_text, font=ctk.CTkFont(size=11), justify="left", anchor="w").pack(anchor="w", padx=15, pady=(0, 10))
+
         # Configuração de Mensagens de Boas-Vindas e Despedidas
         card_welcome = ctk.CTkFrame(container, corner_radius=10)
         card_welcome.pack(fill="x", pady=6)
