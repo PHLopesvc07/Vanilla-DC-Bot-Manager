@@ -1,7 +1,8 @@
 import os
 import sqlite3
+from src.config import APP_DATA_DIR
 
-DB_FILE = os.path.join(os.getcwd(), "vanilla_local.db")
+DB_FILE = os.path.join(APP_DATA_DIR, "vanilla_local.db")
 
 def get_db_connection():
     conn = sqlite3.connect(DB_FILE)
