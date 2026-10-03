@@ -297,17 +297,17 @@ class VoiceStreamApp(ctk.CTk):
         ctk.CTkLabel(card_tutorial, text="📖 PASSO A PASSO: COMO OBTER O TOKEN DO SEU BOT NO DISCORD", font=ctk.CTkFont(size=12, weight="bold"), text_color="#f0b232").pack(anchor="w", padx=15, pady=(10, 4))
         
         tutorial_text = (
-            "1. Acesse o **Portal de Desenvolvedores do Discord**: https://discord.com/developers/applications\n"
-            "2. Clique no botão **'New Application'** (Nova Aplicação) no canto superior direito e dê um nome ao seu Bot.\n"
-            "3. No menu lateral esquerdo, clique na aba **'Bot'**.\n"
-            "4. Na seção Token, clique no botão **'Reset Token'** e copie o Token gerado.\n"
-            "   ⚠️ *DICA SOBRE OS LINKS DA SUA IMAGEM*: Os campos de URL ('Interactions Endpoint', 'Terms of Service', 'Privacy Policy') são **OPCIONAIS** e NÃO são necessários para o bot funcionar! Deixe-os em branco.\n"
-            "5. **IMPORTANTE (Intents Obligatórias para Ligar o Bot)**:\n"
-            "   Ainda na aba 'Bot', role a página até **'Privileged Gateway Intents'** e ATIVE OBRIGATORIAMENTE:\n"
-            "   ✅ **PRESENCE INTENT**\n"
-            "   ✅ **SERVER MEMBERS INTENT**\n"
-            "   ✅ **MESSAGE CONTENT INTENT** (Sem esta intent ativada, o Discord bloqueia o login do Bot)\n"
-            "6. Cole o Token copiado no campo acima e clique em **'⚡ Ligar Bot'**."
+            "1. **COMO OBTER O TOKEN DO BOT**:\n"
+            "   • Acesse o Portal de Desenvolvedores do Discord: https://discord.com/developers/applications\n"
+            "   • Clique em 'New Application' (Nova Aplicação), dê um nome ao seu bot e vá na aba **'Bot'**.\n"
+            "   • Na seção Token, clique em **'Reset Token'** e copie a chave gerada.\n"
+            "   • **ATIVE AS 3 INTENTS OBRIGATÓRIAS**: Role a aba 'Bot' até **'Privileged Gateway Intents'** e ative:\n"
+            "     ✅ **PRESENCE INTENT** | ✅ **SERVER MEMBERS INTENT** | ✅ **MESSAGE CONTENT INTENT**\n\n"
+            "2. **COMO ADICIONAR O BOT AO SEU SERVIDOR (LINK DE CONVITE)**:\n"
+            "   • No Portal de Desenvolvedores, clique na aba **'OAuth2'** ➔ **'URL Generator'** no menu esquerdo.\n"
+            "   • Na caixa **SCOPES**, marque a opção: **`bot`**.\n"
+            "   • Na caixa **BOT PERMISSIONS**, marque: **`Administrator`** (ou envie permissões de Enviar Mensagens, Conectar e Falar em Voz).\n"
+            "   • Copie a URL gerada na parte inferior da página, cole no seu navegador e selecione seu servidor!"
         )
         ctk.CTkLabel(card_tutorial, text=tutorial_text, font=ctk.CTkFont(size=11), justify="left", anchor="w").pack(anchor="w", padx=15, pady=(0, 10))
 
