@@ -452,17 +452,17 @@ class VoiceStreamApp(ctk.CTk):
             command=self.open_app_volume_settings
         ).pack(side="right", expand=True, fill="x", padx=(4, 0))
 
-    # --- LÓGICA DE CONTROLE DE ENERGIA E TOKEN DO BOT ---
     def save_token_action(self):
-        token = self.token_var.get().strip()
+        token = self.token_var.get().strip().strip("'").strip('"')
         if not token:
             messagebox.showerror("Token Ausente", "Por favor, digite ou cole um Token válido antes de salvar.")
             return
+        self.token_var.set(token)
         save_env_var("DISCORD_TOKEN", token)
         messagebox.showinfo("Token Salvo", "✅ Token do Bot salvo com sucesso no seu perfil de usuário local!")
 
-    async def validate_discord_token(self, token: str) -> bool:
-        """Valida o Token fazendo uma requisição rápida de teste à API do Discord."""
+    async def validate_discord_token(self, token: str):
+        """Valida o Token fazendo uma requisição de teste à API do Discord e retorna (is_valid, msg)."""
         url = "https://discord.com/api/v10/users/@me"
         headers = {
             "Authorization": f"Bot {token}",
@@ -471,18 +471,25 @@ class VoiceStreamApp(ctk.CTk):
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=headers) as resp:
-                    return resp.status == 200
-        except Exception:
-            return False
+                    if resp.status == 200:
+                        data = await resp.json()
+                        bot_username = data.get("username", "Bot")
+                        return True, f"Logado como {bot_username}"
+                    elif resp.status == 401:
+                        return False, "🔑 Token inválido (Erro 401 Unauthorized)! Verifique se copiou a chave correta ou se fez o 'Reset Token'."
+                    else:
+                        return False, f"⚠️ Resposta inesperada do Discord (HTTP {resp.status})."
+        except Exception as e:
+            return False, f"❌ Erro de conexão ao validar Token: {e}"
 
     def turn_on_bot(self):
-        token = self.token_var.get().strip()
+        token = self.token_var.get().strip().strip("'").strip('"')
         if not token:
             messagebox.showerror("Token Ausente", "Por favor, insira o Token do Discord Bot para ligar.")
             self.tabview.set("⚙️ Configurações & Bot")
             return
 
-        # Salva o token automaticamente ao ligar
+        self.token_var.set(token)
         save_env_var("DISCORD_TOKEN", token)
         self.btn_turn_on.configure(state="disabled")
         self.update_gui_status("Validando Token...", "#f0b232")
@@ -490,13 +497,13 @@ class VoiceStreamApp(ctk.CTk):
 
     async def async_turn_on_bot(self, token):
         try:
-            # 1. Pré-validação rápida do Token via API HTTP do Discord
-            is_valid = await self.validate_discord_token(token)
+            # 1. Pré-validação do Token via API HTTP do Discord
+            is_valid, detail_msg = await self.validate_discord_token(token)
             if not is_valid:
-                self.after(0, self.on_bot_turn_on_failed, "🔑 Token inválido! Verifique se copiou a chave correta no Portal de Desenvolvedores do Discord.")
+                self.after(0, self.on_bot_turn_on_failed, detail_msg)
                 return
 
-            self.after(0, lambda: self.update_gui_status("Conectando Bot...", "#f0b232"))
+            self.after(0, lambda: self.update_gui_status("Conectando Bot ao Gateway...", "#f0b232"))
 
             if self.bot.is_closed():
                 self.bot = create_discord_bot(get_current_app)
@@ -505,13 +512,13 @@ class VoiceStreamApp(ctk.CTk):
                 print("Conectando Bot ao Discord Gateway...")
                 asyncio.create_task(self.bot.start(token))
                 
-                for _ in range(30):
+                for _ in range(40):
                     if self.bot.is_ready():
                         break
                     await asyncio.sleep(0.5)
                     
                 if not self.bot.is_ready():
-                    self.after(0, self.on_bot_turn_on_failed, "O bot não conseguiu conectar ao gateway. Verifique sua conexão ou se as 3 Privileged Intents estão ativadas.")
+                    self.after(0, self.on_bot_turn_on_failed, "O bot não conseguiu conectar ao gateway. Verifique sua conexão ou se as 3 Privileged Intents estão ativadas no Portal de Desenvolvedores.")
                     return
 
             self.after(0, self.on_bot_turned_on)
