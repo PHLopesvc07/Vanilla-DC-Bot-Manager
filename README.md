@@ -10,16 +10,17 @@ Possui uma interface gráfica moderna (estilo Discord Dark Theme) desenvolvida c
 
 O projeto adota o padrão de **[Semantic Versioning (SemVer 2.0.0)](https://semver.org/lang/pt-BR/)**: `vMAJOR.MINOR.PATCH`.
 
-- **`v1.0.0` (Release Atual Oficial)**:
-  - 💾 **Persistência SQLite**: Banco local `vanilla_local.db` integrado.
-  - 🖥️ **Interface GUI CustomTkinter**: Painel completo de controle, fichas de RPG, abas NSFW e token BYOB.
-  - 🎲 **Motor RPG Rollem**: Notações completas (`XdY`, `XdY!`, `XdYns`, `(expr)`, `dF`, `N#expr`, `XdYdZ`, `XdYdhZ`).
-  - 🔞 **NSFW com Personagens**: Busca por nomes de personagens, animes e mídias na Rule34 e Redgifs.
-  - 📦 **Executável Windows**: Release compilado e pronto para download (`DiscordSimpleBotClient-v1.0.0-Windows-x64.zip`).
+- **`v1.1.0` (Release Atual Oficial)**:
+  - 🔑 **Validação HTTP de Token & Botão Salvar**: Sanitização automática de aspas/espaços, verificação via API do Discord e salvamento manual.
+  - 🖥️ **Assistente de Instalação Nativizado (`Instalador_Vanilla_Bot.exe`)**: Criação automática de atalhos na Área de Trabalho e instalação local isolada.
+  - 💾 **Persistência Multi-Usuário Isolada (`%LOCALAPPDATA%`)**: Armazenamento individual de `.env` e banco `vanilla_local.db` por usuário do Windows.
+  - 📖 **Guia OAuth2 & Intents Integrado**: Instruções passo a passo na UI para gerar links de convite e ativar intents privilegiadas.
+  - 🎲 **Motor RPG Rollem & NSFW Avançado**: Suporte a expressões compostas e busca por tags de personagens/shows.
 
-### 📦 Como Baixar a Release Compilada
-Você pode baixar a versão pronta para uso diretamente na página de Releases do GitHub:
-👉 **[Baixar Vanilla Bot Client v1.0.0 (GitHub Release)](https://github.com/PHLopesvc07/Vanilla-DC-Bot-Manager/releases/tag/v1.0.0)**
+### 📦 Como Baixar as Releases Compiladas
+Você pode baixar os executáveis prontos para uso diretamente na página de Releases do GitHub:
+👉 **[Baixar Vanilla Bot Client v1.1.0 - Instalador Setup (GitHub Release)](https://github.com/PHLopesvc07/Vanilla-DC-Bot-Manager/releases/tag/v1.1.0)**
+👉 **[Baixar Vanilla Bot Client v1.1.0 - Versão Portable ZIP (GitHub Release)](https://github.com/PHLopesvc07/Vanilla-DC-Bot-Manager/releases/tag/v1.1.0)**
 
 ---
 
