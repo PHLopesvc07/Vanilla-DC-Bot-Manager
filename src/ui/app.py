@@ -300,11 +300,13 @@ class VoiceStreamApp(ctk.CTk):
             "1. Acesse o **Portal de Desenvolvedores do Discord**: https://discord.com/developers/applications\n"
             "2. Clique no botão **'New Application'** (Nova Aplicação) no canto superior direito e dê um nome ao seu Bot.\n"
             "3. No menu lateral esquerdo, clique na aba **'Bot'**.\n"
-            "4. Na seção Token, clique no botão **'Reset Token'** e copie a chave gerada.\n"
-            "5. **IMPORTANTE (Intents Obligatórias)**: Role a página até a seção **'Privileged Gateway Intents'** e ATIVE as 3 opções abaixo:\n"
+            "4. Na seção Token, clique no botão **'Reset Token'** e copie o Token gerado.\n"
+            "   ⚠️ *DICA SOBRE OS LINKS DA SUA IMAGEM*: Os campos de URL ('Interactions Endpoint', 'Terms of Service', 'Privacy Policy') são **OPCIONAIS** e NÃO são necessários para o bot funcionar! Deixe-os em branco.\n"
+            "5. **IMPORTANTE (Intents Obligatórias para Ligar o Bot)**:\n"
+            "   Ainda na aba 'Bot', role a página até **'Privileged Gateway Intents'** e ATIVE OBRIGATORIAMENTE:\n"
             "   ✅ **PRESENCE INTENT**\n"
             "   ✅ **SERVER MEMBERS INTENT**\n"
-            "   ✅ **MESSAGE CONTENT INTENT** (Essencial para o motor RPG e comandos)\n"
+            "   ✅ **MESSAGE CONTENT INTENT** (Sem esta intent ativada, o Discord bloqueia o login do Bot)\n"
             "6. Cole o Token copiado no campo acima e clique em **'⚡ Ligar Bot'**."
         )
         ctk.CTkLabel(card_tutorial, text=tutorial_text, font=ctk.CTkFont(size=11), justify="left", anchor="w").pack(anchor="w", padx=15, pady=(0, 10))
@@ -312,7 +314,7 @@ class VoiceStreamApp(ctk.CTk):
         # Configuração de Mensagens de Boas-Vindas e Despedidas
         card_welcome = ctk.CTkFrame(container, corner_radius=10)
         card_welcome.pack(fill="x", pady=6)
-        
+
         ctk.CTkLabel(card_welcome, text="🎉 CONFIGURAÇÃO DE BOAS-VINDAS E DESPEDIDAS", font=ctk.CTkFont(size=13, weight="bold"), text_color="#248046").pack(anchor="w", padx=15, pady=(10, 4))
 
         ctk.CTkLabel(card_welcome, text="Mensagem de Boas-Vindas (Use {user}, {server}, {member_count}):", font=ctk.CTkFont(size=11)).pack(anchor="w", padx=15)
@@ -462,7 +464,10 @@ class VoiceStreamApp(ctk.CTk):
     async def validate_discord_token(self, token: str) -> bool:
         """Valida o Token fazendo uma requisição rápida de teste à API do Discord."""
         url = "https://discord.com/api/v10/users/@me"
-        headers = {"Authorization": f"Bot {token}"}
+        headers = {
+            "Authorization": f"Bot {token}",
+            "User-Agent": "DiscordBot (https://github.com/PHLopesvc07/Vanilla-DC-Bot-Manager, 1.0.0)"
+        }
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, headers=headers) as resp:
