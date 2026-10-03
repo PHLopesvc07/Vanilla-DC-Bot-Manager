@@ -284,6 +284,12 @@ class VoiceStreamApp(ctk.CTk):
         )
         self.btn_show_token.pack(side="right")
 
+        btn_save_token = ctk.CTkButton(
+            card_conn, text="💾 Salvar Token", fg_color="#5865F2", hover_color="#4752C4",
+            command=self.save_token_action
+        )
+        btn_save_token.pack(fill="x", padx=15, pady=(0, 12))
+
         # Card de Tutorial: Como obter seu Token do Discord Bot
         card_tutorial = ctk.CTkFrame(container, corner_radius=10, fg_color="#1e1f22")
         card_tutorial.pack(fill="x", pady=6)
@@ -444,7 +450,26 @@ class VoiceStreamApp(ctk.CTk):
             command=self.open_app_volume_settings
         ).pack(side="right", expand=True, fill="x", padx=(4, 0))
 
-    # --- LÓGICA DE CONTROLE DE ENERGIA DO BOT ---
+    # --- LÓGICA DE CONTROLE DE ENERGIA E TOKEN DO BOT ---
+    def save_token_action(self):
+        token = self.token_var.get().strip()
+        if not token:
+            messagebox.showerror("Token Ausente", "Por favor, digite ou cole um Token válido antes de salvar.")
+            return
+        save_env_var("DISCORD_TOKEN", token)
+        messagebox.showinfo("Token Salvo", "✅ Token do Bot salvo com sucesso no seu perfil de usuário local!")
+
+    async def validate_discord_token(self, token: str) -> bool:
+        """Valida o Token fazendo uma requisição rápida de teste à API do Discord."""
+        url = "https://discord.com/api/v10/users/@me"
+        headers = {"Authorization": f"Bot {token}"}
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, headers=headers) as resp:
+                    return resp.status == 200
+        except Exception:
+            return False
+
     def turn_on_bot(self):
         token = self.token_var.get().strip()
         if not token:
@@ -452,13 +477,22 @@ class VoiceStreamApp(ctk.CTk):
             self.tabview.set("⚙️ Configurações & Bot")
             return
 
+        # Salva o token automaticamente ao ligar
         save_env_var("DISCORD_TOKEN", token)
         self.btn_turn_on.configure(state="disabled")
-        self.update_gui_status("Conectando Bot...", "#f0b232")
+        self.update_gui_status("Validando Token...", "#f0b232")
         asyncio.run_coroutine_threadsafe(self.async_turn_on_bot(token), self.bot_loop)
 
     async def async_turn_on_bot(self, token):
         try:
+            # 1. Pré-validação rápida do Token via API HTTP do Discord
+            is_valid = await self.validate_discord_token(token)
+            if not is_valid:
+                self.after(0, self.on_bot_turn_on_failed, "🔑 Token inválido! Verifique se copiou a chave correta no Portal de Desenvolvedores do Discord.")
+                return
+
+            self.after(0, lambda: self.update_gui_status("Conectando Bot...", "#f0b232"))
+
             if self.bot.is_closed():
                 self.bot = create_discord_bot(get_current_app)
                 
@@ -472,7 +506,7 @@ class VoiceStreamApp(ctk.CTk):
                     await asyncio.sleep(0.5)
                     
                 if not self.bot.is_ready():
-                    self.after(0, self.on_bot_turn_on_failed, "O bot não conseguiu autenticar. Verifique se o Token é válido.")
+                    self.after(0, self.on_bot_turn_on_failed, "O bot não conseguiu conectar ao gateway. Verifique sua conexão ou se as 3 Privileged Intents estão ativadas.")
                     return
 
             self.after(0, self.on_bot_turned_on)
